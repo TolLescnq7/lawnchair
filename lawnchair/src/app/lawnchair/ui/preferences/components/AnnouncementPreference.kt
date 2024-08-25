@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -93,6 +94,7 @@ private fun AnnouncementItem(
         AnnouncementItemContent(
             text = announcement.text,
             url = announcement.url,
+            icon = announcement.iconImageVector,
             onClose = onClose,
         )
     }
@@ -102,6 +104,7 @@ private fun AnnouncementItem(
 private fun AnnouncementItemContent(
     text: String,
     url: String?,
+    icon: ImageVector,
     modifier: Modifier = Modifier,
     onClose: () -> Unit,
 ) {
@@ -150,7 +153,11 @@ private fun AnnouncementItemContent(
             shape = MaterialTheme.shapes.large,
             color = MaterialTheme.colorScheme.surfaceVariant,
         ) {
-            AnnouncementPreferenceItemContent(text = text, url = url)
+            AnnouncementPreferenceItemContent(
+                text = text,
+                url = url,
+                icon = icon,
+            )
         }
     }
 }
@@ -166,6 +173,7 @@ private fun calculateAlpha(progress: Float): Float {
 private fun AnnouncementPreferenceItemContent(
     text: String,
     url: String?,
+    icon: ImageVector,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
@@ -194,7 +202,7 @@ private fun AnnouncementPreferenceItemContent(
         },
         startWidget = {
             Icon(
-                imageVector = Icons.Rounded.NewReleases,
+                imageVector = icon,
                 tint = MaterialTheme.colorScheme.primary,
                 contentDescription = null,
             )
@@ -224,6 +232,7 @@ private fun InfoPreferenceWithoutLinkPreview() {
     AnnouncementPreferenceItemContent(
         text = "Very important announcement ",
         url = "",
+        icon = Icons.Rounded.NewReleases,
     )
 }
 
@@ -233,5 +242,6 @@ private fun InfoPreferenceWithLinkPreview() {
     AnnouncementPreferenceItemContent(
         text = "Very important announcement with a very important link",
         url = "https://lawnchair.app/",
+        icon = Icons.Rounded.NewReleases,
     )
 }
