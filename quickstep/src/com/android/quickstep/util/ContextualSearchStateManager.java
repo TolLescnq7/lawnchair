@@ -27,6 +27,7 @@ import static com.android.quickstep.util.SystemActionConstants.SYSTEM_ACTION_ID_
 import android.app.PendingIntent;
 import android.app.RemoteAction;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.IIntentReceiver;
 import android.content.IIntentSender;
 import android.content.Intent;
@@ -99,14 +100,20 @@ public class ContextualSearchStateManager  {
         mContextualSearchPackageReceiver =
                 new SimpleBroadcastReceiver(context, UI_HELPER_EXECUTOR,
                         (unused) -> requestUpdateProperties());
-        mContextualSearchPackage = mContext.getResources().getString(
+        String contextualSearchPackage = "";
+if (Utilities.ATLEAST_R) {
+    try {
+        contextualSearchPackage = mContext.getResources().getString(
                 com.android.internal.R.string.config_defaultContextualSearchPackageName);
-        mSystemUiProxy = systemUiProxy;
-        mTopTaskTracker = topTaskTracker;
-
-        if (areAllContextualSearchFlagsDisabled()
-                || !context.getPackageManager().hasSystemFeature(FEATURE_CONTEXTUAL_SEARCH)) {
-            // If we had previously registered a SystemAction which is no longer valid, we need to
+    } catch (Resources.NotFoundException e) {
+        Log.w(TAG, "Contextual search package resource unavailable", e);
+    }
+}
+        
+mContextualSearchPackage = contextualSearchPackage;
+        if (!Utilities.ATLEAST_R
+        || areAllContextualSearchFlagsDisabled()
+        || !context.getPackageManager().hasSystemFeature(FEATURE_CONTEXTUAL_SEARCH)) {            // If we had previously registered a SystemAction which is no longer valid, we need to
             // unregister it here.
             if (Utilities.ATLEAST_R) {
                 unregisterSearchScreenSystemAction();
