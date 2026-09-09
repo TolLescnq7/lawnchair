@@ -89,7 +89,7 @@ public class ContextualSearchStateManager  {
     protected final SystemUiProxy mSystemUiProxy;
     protected final TopTaskTracker mTopTaskTracker;
 
-    @Inject
+        @Inject
     public ContextualSearchStateManager(
             @ApplicationContext Context context,
             SettingsCache settingsCache,
@@ -97,6 +97,8 @@ public class ContextualSearchStateManager  {
             TopTaskTracker topTaskTracker,
             DaggerSingletonTracker lifeCycle) {
         mContext = context;
+        mSystemUiProxy = systemUiProxy;
+        mTopTaskTracker = topTaskTracker;
         mContextualSearchPackageReceiver =
                 new SimpleBroadcastReceiver(context, UI_HELPER_EXECUTOR,
                         (unused) -> requestUpdateProperties());
